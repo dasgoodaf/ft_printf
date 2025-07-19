@@ -6,7 +6,7 @@
 /*   By: bdalmaz <bdalmaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/19 14:13:04 by bdalmaz           #+#    #+#             */
-/*   Updated: 2025/07/19 16:27:31 by bdalmaz          ###   ########.fr       */
+/*   Updated: 2025/07/19 16:39:57 by bdalmaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int ft_putstr(char *str)
 	int res;
 
 	res =  0;
+	if(!str)
+		return(ft_putstr("(null)"));
 	while(*str)
 		res += ft_putchar(*str++);
 	return(res);
@@ -82,6 +84,8 @@ int ft_putptr(size_t n)
 	char *hex = "0123456789abcdef";
 
 	res = 0;
+	if(!n)
+		return(ft_putstr("(nil)"));
 	if(n > 15)
 	{
 		res += ft_putptr(n/16);
@@ -94,6 +98,7 @@ int ft_putptr(size_t n)
 int ft_type(char c, va_list ap)
 {
 	int res;
+	size_t ptr;
 	
 	res = 0;
 	if(c == 'c')
@@ -110,8 +115,10 @@ int ft_type(char c, va_list ap)
 		res += ft_puthex(va_arg(ap, unsigned int), 0);
 	else if(c == 'p')
 	{
-		res += ft_putstr("0x");
-		res += ft_putptr(va_arg(ap, size_t));
+		ptr = va_arg(ap, size_t);
+		if(ptr)
+			res += ft_putstr("0x");
+		res += ft_putptr(ptr);
 	}
 	else
 		res += ft_putchar(c);
@@ -137,7 +144,8 @@ int ft_printf(const char *format, ...)
 
 int	main(void)
 {
-	printf("%d\n", ft_printf("%%\n"));
-	printf("%d\n", printf("%%\n"));
+	char *a = NULL;
+	printf("%d\n", ft_printf("%% %s %p\n", a, a));
+	printf("%d\n", printf("%% %s %p\n", a, a));
 	return (0);
 }
